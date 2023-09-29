@@ -57,6 +57,8 @@ async def main():
         payment_request = await lnbits_processor.create_invoice(10, "Chatbot Payment")
         payment_hash = payment_request.get("payment_hash")
         invoice = payment_request.get("payment_request")
+        st.write("Please pay the invoice below to continue chatting")
+        st.text(invoice)
         payment_url = f"lightning:{invoice}"
         qr_image = generate_qr(payment_url)
         st.image(qr_image, width=300)
