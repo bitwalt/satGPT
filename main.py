@@ -1,7 +1,7 @@
 import os
 import langchain
 import streamlit as st
-from config import MODELS
+from config import MODELS, MAX_TOKENS, PRICE
 from langchain.chat_models import ChatOpenAI
 from langchain.schema import ChatMessage
 from utils import init_page, load_prompt_models, write_chat, StreamHandler, generate_qr
@@ -54,11 +54,11 @@ async def main():
         st.session_state.messages.append(ChatMessage(role="user", content=prompt))
         st.chat_message("user").write(prompt)
 
-        payment_request = await lnbits_processor.create_invoice(10, "Chatbot Payment")
+        payment_request = await lnbits_processor.create_invoice(PRICE, "Chatbot Payment")
         payment_hash = payment_request.get("payment_hash")
         invoice = payment_request.get("payment_request")
         st.write("Please pay the invoice below to continue chatting")
-        st.text(invoice)
+        st.write(invoice)
         payment_url = f"lightning:{invoice}"
         qr_image = generate_qr(payment_url)
         st.image(qr_image, width=300)
@@ -74,11 +74,9 @@ async def main():
                     break
                 else:
                     retry += 1
-                    time.sleep(10)
-                    if retry > 12:
-                        st.error(
-                            "120 seconds elapsed and payment not received. Please try again."
-                        )
+                    time.sleep(1)
+                    if retry > 120:
+                        st.error("Payment elapsed. Please try again.")
                         break
 
         if payment_received:
@@ -97,7 +95,7 @@ async def main():
                     openai_api_base=api_base,
                     streaming=True,
                     callbacks=[stream_handler],
-                    max_tokens=1000,
+                    max_tokens=MAX_TOKENS,
                 )
                 response = llm(st.session_state.messages)
                 st.session_state.messages.append(
