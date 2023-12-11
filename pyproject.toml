@@ -5,13 +5,18 @@ description = ""
 authors = ["waltermaffy <walterm21@proton.me>"]
 
 [tool.poetry.dependencies]
-python = ">=3.9.0,<3.11"
-langchain = "^0.0.240"
+python = ">3.9.7,<3.11"
+langchain = {extras = ["docarray"], version = "^0.0.240"}
 streamlit = "^1.25.0"
 qrcode = "^7.4.2"
 openai = "^0.27.8"
 pylnbits = "^0.0.7"
 lnurl = "^0.4.1"
+requests = "^2.31.0"
+sentence-transformers = "^2.2.2"
+orjson = "^3.9.9"
+
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"

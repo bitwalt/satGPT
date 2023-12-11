@@ -21,12 +21,14 @@ class LnbitsProcessor:
             )
             return invoice
 
-    async def check_invoice(self, payment_hash: str):
+    async def has_been_paid(self, payment_hash: str) -> bool:
         async with ClientSession() as session:
             uw = UserWallet(self.cfg, session)
             invoice_result = await uw.check_invoice(payment_hash)
-            return invoice_result
-
+            if "paid" in invoice_result and invoice_result["paid"] is True:
+                return True
+            else:
+                return False
 
 if __name__ == "__main__":
     loop = asyncio.new_event_loop()

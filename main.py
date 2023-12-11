@@ -66,10 +66,10 @@ async def main():
 
         payment_received = False
         retry = 0
-        with st.spinner("Waiting for payment..."):
+        with st.spinner("Waiting for payment... (2 minutes timeout)"):
             while not payment_received:
-                check_payment = await lnbits_processor.check_invoice(payment_hash)
-                if "paid" in check_payment and check_payment["paid"] is True:
+                has_paid = await lnbits_processor.has_been_paid(payment_hash)
+                if has_paid:
                     payment_received = True
                     break
                 else:

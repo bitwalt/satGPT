@@ -6,8 +6,7 @@ ENV PATH="/root/.local/bin:$PATH"
 WORKDIR /app
 COPY pyproject.toml poetry.lock ./
 RUN poetry config virtualenvs.create false
-RUN poetry install --no-dev --no-root
+RUN poetry install -v --no-root
 COPY . .
 EXPOSE 8501
-
 CMD ["poetry", "run", "streamlit", "run", "main.py"]
