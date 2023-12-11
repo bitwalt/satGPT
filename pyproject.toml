@@ -13,8 +13,6 @@ openai = "^0.27.8"
 pylnbits = "^0.0.7"
 lnurl = "^0.4.1"
 requests = "^2.31.0"
-sentence-transformers = "^2.2.2"
-orjson = "^3.9.9"
 
 
 [build-system]
