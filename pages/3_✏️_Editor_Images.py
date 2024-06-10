@@ -22,7 +22,7 @@ async def process_image(editor_mode, image_b64, scaling_factor):
 
 
 async def main():
-    init_page()
+    init_page(image_page=True)
     st.title("✏️ Editor Images")
     ln_processor = st.session_state["ln_processor"]
     editor_mode = st.selectbox("Select Editor Mode", EDITOR_MODES)

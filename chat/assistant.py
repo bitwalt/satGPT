@@ -8,13 +8,15 @@ from langchain_openai import ChatOpenAI
 from chat import utils
 from chat.streaming import StreamHandler
 from lightning.utils import handle_payment
-
+from chat.utils import PromptModel
 
 class ContextChatbot:
-    def __init__(self):
-        self.openai_model = utils.configure_openai()
+    def __init__(self, prompt_model: PromptModel):
+        self.openai_model = "gpt-3.5-turbo"
         self.ln_processor = st.session_state.get("ln_processor", None)
+        self.prompt_model = prompt_model
 
+        
     @st.cache_resource
     def setup_chain(_self):
         memory = ConversationBufferMemory()
@@ -22,10 +24,11 @@ class ContextChatbot:
         chain = ConversationChain(llm=llm, memory=memory, verbose=True)
         return chain
 
-    @utils.enable_chat_history
-    async def main(self, prompt_model):
+    # @utils.enable_chat_history
+    async def main(self, prompt_model: PromptModel):
         chain = self.setup_chain()
-        user_query = st.chat_input(placeholder="Ask me anything!")
+        utils.display_msg(prompt_model.welcome_message, "assistant")
+        user_query = st.chat_input(placeholder="Type your message...")
         if user_query:
             utils.display_msg(user_query, "user")
             with st.chat_message("assistant"):

@@ -6,7 +6,7 @@ import requests
 import streamlit as st
 from PIL import Image
 
-from config import PRICING
+from config import PRICING, DEBUG
 
 
 def generate_qr(url: str):
@@ -18,7 +18,7 @@ def generate_qr(url: str):
     return img
 
 
-async def handle_payment(processor, cfg, debug=True):
+async def handle_payment(processor, cfg, debug=DEBUG):
     """Handle the payment process."""
     if debug:
         return True

@@ -57,13 +57,14 @@ def get_download_image_link(image, filename, text):
 
 
 async def image_generation() -> None:
-    init_page()
+    init_page(image_page=True)
     st.title("🖼 Generate Images")
     input_text = st.text_input(
         "Insert text to generate an image",
         value="Iron man portrait, highly detailed, science fiction landscape",
     )
-    image_model = st.selectbox("Select model", [i for i in IMAGE_MODELS.keys()])
+    # image_model = st.selectbox("Select model", [i for i in IMAGE_MODELS.keys()])
+    image_model = "DALL-E 2"
     num_of_images = st.number_input("Number of images", min_value=1, step=1)
     image_size = st.selectbox(
         "Select image size", options=[i for i in IMAGE_MODELS[image_model].keys()]

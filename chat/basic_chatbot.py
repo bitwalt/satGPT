@@ -1,35 +1,43 @@
 import streamlit as st
-from langchain.chains import ConversationChain
-from langchain_openai import ChatOpenAI
-
-from chat import utils
-from chat.streaming import StreamHandler
+from chat.utils import load_prompt_models, setup_prompt_model_selection
+from openai import OpenAI
+from lightning.utils import handle_payment
 
 
-class BasicChatbot:
-    def __init__(self):
-        self.openai_model = utils.configure_openai()
+async def handle_chat():
+    
+    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-    def setup_chain(self):
-        llm = ChatOpenAI(model_name=self.openai_model, temperature=0, streaming=True)
-        chain = ConversationChain(llm=llm, verbose=True)
-        return chain
+    if "openai_model" not in st.session_state:
+        st.session_state["openai_model"] = "gpt-3.5-turbo"
 
-    @utils.enable_chat_history
-    def main(self):
-        chain = self.setup_chain()
-        user_query = st.chat_input(placeholder="Ask me anything!")
-        if user_query:
-            utils.display_msg(user_query, "user")
+    if "messages" not in st.session_state:
+        st.session_state.messages = []
+
+    for message in st.session_state.messages:
+        if message["role"] == "system":
+            continue
+        with st.chat_message(message["role"]):
+            st.markdown(message["content"])
+
+    if prompt := st.chat_input("Type your message..."):
+        payment_received = await handle_payment(st.session_state.ln_processor, {"mode": "chat"})
+        if payment_received:
+            st.balloons()
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            with st.chat_message("user"):
+                st.markdown(prompt)
+
             with st.chat_message("assistant"):
-                st_cb = StreamHandler(st.empty())
-                result = chain.invoke({"input": user_query}, {"callbacks": [st_cb]})
-                response = result["response"]
-                st.session_state.messages.append(
-                    {"role": "assistant", "content": response}
+                stream = client.chat.completions.create(
+                    model=st.session_state["openai_model"],
+                    messages=[
+                        {"role": m["role"], "content": m["content"]}
+                        for m in st.session_state.messages
+                    ],
+
+                    stream=True,
                 )
+                response = st.write_stream(stream)
+            st.session_state.messages.append({"role": "assistant", "content": response})
 
-
-if __name__ == "__main__":
-    obj = BasicChatbot()
-    obj.main()

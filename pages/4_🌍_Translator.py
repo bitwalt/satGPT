@@ -1,43 +1,34 @@
 import asyncio
 
 import streamlit as st
-from langchain.chat_models import ChatOpenAI
-from langchain.schema import ChatMessage
 
-from chat.utils import *
-from config import MAX_TOKENS, MODELS, PRICE
+from chat.assistant import ContextChatbot
+from chat.utils import load_prompt_models, setup_prompt_model_selection
 from utils import init_page
+from openai import OpenAI
+from lightning.utils import handle_payment
+from chat.basic_chatbot import handle_chat
 
 
 async def main():
-    init_page()
+    init_page(image_page=False)
     st.title("🌍 Translator")
-    model_name = st.session_state["model_name"]
-    api_base = MODELS[model_name]
-
-    llm = ChatOpenAI(
-        openai_api_key=st.session_state["OPENAI_API_KEY"],
-        openai_api_base=api_base,
-        max_tokens=MAX_TOKENS,
+    st.text(
+        "Translate text from one language to another using ChatGPT"
     )
 
     # Prompt Selection
-    clean_chat = False
     prompt_models = load_prompt_models()
     prompt_model = prompt_models["🌍 Translator"]
+
+    if st.session_state["prompt_model"] != prompt_model:
+        st.session_state.prompt_model = prompt_model
+        st.session_state.messages = [{"role": "system", "content": prompt_model.prompt_start}]
 
     with st.expander("Show Prompt"):
         st.write(prompt_model.prompt_start)
 
-    if clean_chat or "messages" not in st.session_state:
-        st.session_state["messages"] = [
-            ChatMessage(role="system", content=prompt_model.prompt_start),
-            ChatMessage(role="assistant", content=prompt_model.welcome_message),
-        ]
-
-    write_chat()
-
-    await handle_chat_interaction(llm, prompt_model)
+    await handle_chat()
 
 
 if __name__ == "__main__":

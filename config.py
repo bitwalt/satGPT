@@ -2,6 +2,8 @@ import os
 
 import streamlit as st
 
+
+DEBUG = False
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
 ALBY_API_KEY = st.secrets["ALBY_API_KEY"]
