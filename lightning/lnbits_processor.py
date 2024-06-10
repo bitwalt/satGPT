@@ -1,17 +1,20 @@
 import asyncio
+
 from aiohttp.client import ClientSession
 from pylnbits.config import Config
 from pylnbits.user_wallet import UserWallet
-import streamlit as st
+
+from lightning.processor import Processor
 
 
-class LnbitsProcessor:
-    def __init__(self) -> None:
+class LnbitsProcessor(Processor):
+    def __init__(self, in_key, admin_key, lnbits_url) -> None:
         self.cfg = Config(
-            in_key=st.secrets["LNBITS_INVOICE_KEY"],
-            admin_key=st.secrets["LNBITS_ADMIN_KEY"],
-            lnbits_url=st.secrets["LNBITS_URL"],
+            in_key=in_key,
+            admin_key=admin_key,
+            lnbits_url=lnbits_url,
         )
+        self.active = False
 
     async def create_invoice(self, amt: int, memo: str, webhook: str = "") -> dict:
         async with ClientSession() as session:
@@ -29,6 +32,7 @@ class LnbitsProcessor:
                 return True
             else:
                 return False
+
 
 if __name__ == "__main__":
     loop = asyncio.new_event_loop()

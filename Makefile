@@ -1,4 +1,5 @@
 compose-run:
+	make compose-stop
 	echo "Starting containers with compose..."
 	docker-compose up -d --build
 
@@ -14,6 +15,9 @@ black:
 
 isort:
 	poetry run isort --profile black . 
+
+run:
+	poetry run streamlit run 0_💬_Chat_with_assistant.py
 
 format:
 	make isort

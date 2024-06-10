@@ -1,12 +1,15 @@
-FROM python:3.10-slim
-RUN apt-get update
-RUN apt-get install -y curl python3-dev autoconf 
-RUN curl -sSL https://install.python-poetry.org | python3 -
-ENV PATH="/root/.local/bin:$PATH"
+FROM python:3.11-buster
+
+RUN pip install poetry==1.4.2
+
+ENV POETRY_NO_INTERACTION=1 \
+    POETRY_CACHE_DIR=/tmp/poetry_cache
+
 WORKDIR /app
+
 COPY pyproject.toml poetry.lock ./
 RUN poetry config virtualenvs.create false
-RUN poetry install -v --no-root
+RUN poetry install --without dev && rm -rf $POETRY_CACHE_DIR
 COPY . .
 EXPOSE 8501
-CMD ["poetry", "run", "streamlit", "run", "main.py"]
+CMD ["poetry", "run", "streamlit", "run", "0_💬_Chat_with_assistant.py"]
