@@ -2,21 +2,16 @@ import os
 
 import streamlit as st
 
-
-DEBUG = False
+DEV = st.secrets["DEV"]
 OPENAI_API_KEY = st.secrets["OPENAI_API_KEY"]
 REPLICATE_API_TOKEN = st.secrets["REPLICATE_API_TOKEN"]
 ALBY_API_KEY = st.secrets["ALBY_API_KEY"]
 
 CHAT_MODELS = "./data/models.yml"
 MAX_TOKENS = 1000
-PRICE = 100
-MODELS = {
-    "gpt-3.5-turbo": "https://api.openai.com/v1",
-    # "llama2": "http://api.cashai.space:3001/v1",
-}
-LOGO_PATH_WHITE = "./data/pelliken_logo_white.png"
-LOGO_PATH_BLACK = "./data/pelliken_logo_black.png"
+
+LOGO_PATH_WHITE = "./data/pelliken_logo.png"
+LOGO_PATH_BLACK = "./data/pelliken_logo2.png"
 
 IMAGE_SIZE = {"SMALL": "256x256", "MEDIUM": "512x512", "LARGE": "1024x1024"}
 IMAGE_MODELS = ["DALLE-2", "DALLE-3"]

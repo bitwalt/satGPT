@@ -6,7 +6,6 @@ import aiohttp
 import streamlit as st
 
 from chat.utils import *
-from config import MAX_TOKENS, MODELS, PRICE
 from lightning.utils import handle_payment
 from replicate_api import restore_image, upscale_image
 from utils import init_page

@@ -6,7 +6,7 @@ import requests
 import streamlit as st
 from PIL import Image
 
-from config import PRICING, DEBUG
+from config import DEV, PRICING
 
 
 def generate_qr(url: str):
@@ -18,7 +18,7 @@ def generate_qr(url: str):
     return img
 
 
-async def handle_payment(processor, cfg, debug=DEBUG):
+async def handle_payment(processor, cfg, debug=DEV):
     """Handle the payment process."""
     if debug:
         return True
@@ -67,7 +67,7 @@ async def handle_payment(processor, cfg, debug=DEBUG):
     return payment_received
 
 
-@st.cache_data(ttl=60)
+@st.cache_data(ttl=30)
 def get_sat_price():
     # Get price of 1 BTC from bitfinex
     response = requests.get("https://api-pub.bitfinex.com/v2/ticker/tBTCUSD")

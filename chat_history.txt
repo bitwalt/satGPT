@@ -1,4 +1,0 @@
-user: Ciao
-assistant: Ciao! Come posso aiutarti oggi?
-user: Dimmi tu
-assistant: Posso aiutarti con informazioni, suggerimenti o risolvere eventuali dubbi che potresti avere. Basta chiedere!

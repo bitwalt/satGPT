@@ -6,18 +6,15 @@ authors = ["waltermaffy <walterm21@proton.me>"]
 
 [tool.poetry.dependencies]
 python = ">3.9.7,<3.12"
-langchain = "0.1.17"
 streamlit = "^1.25.0"
 qrcode = "^7.4.2"
 openai = "^1.11.1"
-pylnbits = "^0.0.7"
 lnurl = "^0.4.1"
 requests = "^2.31.0"
 streamlit-javascript = "^0.1.5"
 replicate = "^0.25.2"
-langchain-community = "0.0.36"
-langchain-openai = "0.1.4"
-langchainhub = "0.1.15"
+aiohttp = "^3.9.5"
+langchain = "^0.2.3"
 
 
 [build-system]

@@ -9,9 +9,10 @@ import streamlit as st
 import yaml
 from langchain.schema import ChatMessage
 
+from chat.streaming import StreamHandler
 from config import *
 from lightning.utils import handle_payment
-from chat.streaming import StreamHandler
+
 
 # decorator
 async def enable_chat_history(func):
